@@ -1,6 +1,6 @@
 
 const express = require('express');
-const { signup, login, createrole, createTask } = require('../Controllers/userControllers');
+const { signup, login, createrole, createTask, submitRating } = require('../Controllers/userControllers');
 const { getVerified } = require('../middleware/isLogedIn');
 const { giveAccessTo } = require('../middleware/access');
 
@@ -13,7 +13,8 @@ userRouter.post('/login', login)
 
 
 userRouter.use(getVerified, giveAccessTo("ADMIN"))
-
+userRouter.post("/rate", submitRating)
+// userRouter.post('/submitRating',)
 userRouter.post('/createRole', createrole)
 userRouter.post('/createTask', createTask)
 

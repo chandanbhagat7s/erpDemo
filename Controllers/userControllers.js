@@ -112,6 +112,56 @@ exports.createrole = runAsync(async (req, res, next) => {
 
 
 
+exports.submitRating = runAsync(async (req, res, next) => {
+    const { star, taskID } = req.body;
+
+
+    if (!taskID) {
+        return next(new appError("task id not provided "))
+    }
+    let doc;
+    const changeFor = req.user.role;
+    console.log("ROLE is", changeFor);
+
+    if (changeFor == "ADMIN") {
+        doc = await Task.findByIdAndUpdate(taskID, {
+            adminRating: star
+        })
+        console.log("DATA IS ", data);
+
+    } else if (changeFor == "TEACHER") {
+        doc = await Task.findByIdAndUpdate(taskID, {
+            teacherRating: star
+        })
+    } else {
+
+        doc = await Task.findByIdAndUpdate(taskID, {
+            hodRating: star
+        })
+    }
+
+    if (!doc) {
+
+        res.status(400).send({
+            status: false,
+            data: `problem in submitting the rating please try again`
+        })
+    }
+
+
+
+
+    res.status(200).send({
+        status: true,
+        data: `submitted the rating of ${star}`
+    })
+
+
+
+})
+
+
+
 
 
 
